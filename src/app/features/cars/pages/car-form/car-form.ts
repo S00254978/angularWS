@@ -9,7 +9,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CreateCarDto } from '../../models/car.model';
 import { CarService } from '../../services/car.service';
-import { notBlank } from '../../../../shared/validators/not-blank.validator';
+import { forbiddenValue, notBlank } from '../../../../shared/validators/not-blank.validator';
 
 @Component({
   imports: [
@@ -35,7 +35,10 @@ export class CarForm implements OnInit {
   readonly currentYear = new Date().getFullYear();
 
   carForm = this.formBuilder.nonNullable.group({
-    make: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), notBlank]],
+    make: [
+      '',
+      [Validators.required, Validators.minLength(2), Validators.maxLength(30), notBlank, forbiddenValue('test')],
+    ],
     model: ['', [Validators.required, Validators.maxLength(30), notBlank]],
     year: this.formBuilder.control<number | null>(null, [
       Validators.min(1950),

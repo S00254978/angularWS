@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export function notBlank(control: AbstractControl): ValidationErrors | null {
   const value = control.value;
@@ -6,4 +6,8 @@ export function notBlank(control: AbstractControl): ValidationErrors | null {
     return { blank: true };
   }
   return null;
+}
+
+export function forbiddenValue(word: string): ValidatorFn {
+  return (control) => (control.value === word ? { forbiddenValue: true } : null);
 }
