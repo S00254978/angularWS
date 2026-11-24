@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Car, CreateCarDto } from '../models/car.model';
+import { Car, CreateCarDto, UpdateCarDto } from '../models/car.model';
 
 @Service()
 export class CarService {
@@ -18,5 +18,13 @@ export class CarService {
 
 	addCar(car: CreateCarDto): Observable<Car> {
 		return this.http.post<Car>(this.apiUrl, car);
+	}
+
+	updateCar(id: string, changes: UpdateCarDto): Observable<Car> {
+		return this.http.put<Car>(`${this.apiUrl}/${id}`, changes);
+	}
+
+	deleteCar(id: string): Observable<void> {
+		return this.http.delete<void>(`${this.apiUrl}/${id}`);
 	}
 }
