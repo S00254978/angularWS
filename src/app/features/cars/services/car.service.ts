@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Car } from '../models/car.model';
 
 @Service()
@@ -10,5 +10,28 @@ export class CarService {
 
 	getCars(): Observable<Car[]> {
 		return this.http.get<Car[]>(this.apiUrl);
+	}
+
+	getCarById(id: string): Observable<Car> {
+		return this.http.get<Car>(`${this.apiUrl}/${id}`);
+	}
+
+	addCar(car: Car): Observable<Car> {
+		return this.http.post<Car>(this.apiUrl, car).pipe(
+			catchError(this.handleError),
+		);
+	}
+
+	private handleError(error: HttpErrorResponse) {
+		if (error.status === 0) {
+			console.error('An error occurred:', error.error);
+		} else {
+			if (error.status === 401 || error.status === 403) {
+				console.error('authorisation issue ', error.status);
+				return throwError(() => new Error('You are not authorised for that action'));
+			}
+			console.error(`Backend returned code ${error.status}, body was: `, error.error);
+		}
+		return throwError(() => new Error('Something bad happened; please try again later.'));
 	}
 }

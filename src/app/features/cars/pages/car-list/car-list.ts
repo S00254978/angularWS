@@ -3,9 +3,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Car } from '../../models/car.model';
 import { CarService } from '../../services/car.service';
+import { CarCard } from '../../components/car-card/car-card';
 
 @Component({
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, CarCard],
   selector: 'app-car-list',
   styleUrl: './car-list.scss',
   templateUrl: './car-list.html',
